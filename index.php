@@ -11,8 +11,19 @@ if(isset($_POST['submit'])){
 	$postnumber = $_POST['number'];
 
 	$sql = "INSERT INTO device (number, s_id, p_id) VALUES ('".$postnumber."', '".$poststatus."', '".$postphase."')";
-	echo $sql;
-	$result = mysqli_query($conn, $sql);
+    $result = mysqli_query($conn, $sql);
+    
+    $sql2 = "SELECT id FROM DEVICE WHERE number = '".$postnumber."' ";
+    $result2 = mysqli_query($conn, $sql2);
+    
+    while ($row2 = mysqli_fetch_assoc ($result2)){
+			$dev=$row2['id'];
+    }
+        
+    $sql3 = "INSERT INTO date (d_id, s_id, last_modification) VALUES ('".$dev."', '".$poststatus."', '".$date."')";
+    $result3 = mysqli_query($conn, $sql3);
+	
+	
 }
 
 ?>
@@ -40,9 +51,10 @@ if(isset($_POST['submit'])){
 		$result = mysqli_query($conn, $sql);
 		while ($row = mysqli_fetch_assoc ($result)){
 			$stage=$row['stage'];
+            $description=$row['description'];
 			$p_id=$row['id'];
 	
-		echo "<option value='$p_id'><center>" . $stage . "</center></option>";
+		echo "<option value='$p_id'><center>" . $stage .' - '.$description. "</center></option>";
 		}
 	?>
 	</select>
